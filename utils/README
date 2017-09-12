@@ -1,0 +1,13 @@
+modify_wav_files            -   script to extract, downsamples and cut .wav files as necessary
+
+read_scp.py                 -   wrappers for kaldi-format data
+
+srt2ctm                     -   Write .ctm from .srt files, also write labels from .ctm files
+
+write_all_kaldi_files.py    -   Script to write kaldi files (wav.scp,utt2spk,text,segments,spk2utt)
+
+ark2text.py                 -   Contains modules to write kaldi-produced '.ark' files, to text-featur                                   e-files on a per-movie basis.
+
+
+
+

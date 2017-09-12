@@ -1,0 +1,7 @@
+    all_srt_movie_list.txt - file containing paths to .srt, and .mkv/.mp4(video files) of different movies (not used currently 
+                             since wav files exist in /data/movie_wavs, may be necessary if wav files are corrupted, or not 
+                             created)
+    srt_files.txt          - file containing list of paths to .srt files (Latest as of Last Updated)
+    wav_files.txt          - file containing list of paths to .wav files corresponding to those or .srt files (Latest as of Last Updated)
+
+    movie_data.py          - Update the movielist, by updating the srt_files and wav_files list, given directories corresponding to new srt and wav files.

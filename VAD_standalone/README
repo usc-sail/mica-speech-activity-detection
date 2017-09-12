@@ -1,0 +1,6 @@
+path.sh                 -   Config file for exporting kaldi paths
+generate_vad_pred.sh    -   standalone script for running VAD expt
+expt                    -   directory where experiments will be run
+movies.txt              -   input to generate_vad_pred.sh
+python_scripts/         -   contains scripts used for VAD prediction
+steps/, utils/          -   standard Kaldi steps and utils directories

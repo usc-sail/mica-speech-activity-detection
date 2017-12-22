@@ -45,8 +45,12 @@ for movie in movies:
         fw.write("%d " %frame)
     fw.write('\n')
     fw.close()
-    start_ind = labels.index(1)
     fw = open(ctmpath+'/'+movie+'.ctm','w')
+    try:
+        start_ind = labels.index(1)
+    except:
+        fw.close()
+        continue
 
     while 1:
         try:

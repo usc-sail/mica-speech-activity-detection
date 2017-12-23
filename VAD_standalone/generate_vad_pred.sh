@@ -22,8 +22,8 @@
 ##      writeVAD_file : the text file to which segment-wise labels are written to
 ##      labelpath     : the text file to which movie-wise labels are written to
 ##      med_filt      : length of median filter window to be used for median-filtering 
-##                      the labels, if specified 0, posteriors will be printed to file 
-##                      instead of labels
+##                      the labels
+##      round_flag    : if 0, posteriors are printed, if 1 posteriors are rounded.
 ##
 ## 
 
@@ -43,11 +43,12 @@ feats_dir=$expt_dir/feats
 feats_log=$feats_dir/log
 scpfile=$feats_dir/wav.scp
 ctmpath=$expt_dir/ctm
-labelpath=$expt_dir/VAD_movie.labels
+labelpath=$expt_dir/frame_level_labels
 py_scripts_dir=$proj_dir/python_scripts
 writeVAD_file=$expt_dir/VAD.labels
 model_file=/proj/rajat/keras_model/gentle_aligned_data/exp_data/exp1.1/final_nnet_30
 movie_list=$expt_dir/movie.list
+round_flag=1
 med_filt=11
 movtime_int=0
 
@@ -96,18 +97,19 @@ done > $scpfile
 sort $scpfile -o $scpfile
 
 ### Extract mfcc-features for wav
-echo " >>>> EXTRACTING MFCC FEATURES <<<< "
-steps/make_mfcc.sh --nj $nj --cmd $cmd $feats_dir $feats_log/mfcc_logs $feats_dir/mfcc_data
-compute-cmvn-stats scp:$feats_dir/feats.scp ark,scp,t:$feats_dir/cmvn_stats.ark,$feats_dir/cmvn_stats.scp
-apply-cmvn --norm-vars=true scp:$feats_dir/cmvn_stats.scp scp,p:$feats_dir/feats.scp ark,scp,t:$feats_dir/norm_feats.ark,$feats_dir/norm_feats.scp
-steps/splice_feats_mod.sh --nj $nj --cmd $cmd $feats_dir $feats_log/splice_logs $feats_dir/mfcc_data
+echo " >>>> EXTRACTING FEATURES <<<< "
+#steps/make_mfcc.sh --nj $nj --cmd $cmd $feats_dir $feats_log/mfcc_logs $feats_dir/mfcc_data    # mfcc
+steps/make_fbank.sh --nj $nj --cmd $cmd $feats_dir $feats_log/mfcc_logs $feats_dir/mfcc_data    # log-mel
+compute-cmvn-stats scp:$feats_dir/feats.scp ark,scp,t:$feats_dir/cmvn_stats.ark,$feats_dir/cmvn_stats.scp   # compute cepstral mean and variance
+apply-cmvn --norm-vars=true scp:$feats_dir/cmvn_stats.scp scp,p:$feats_dir/feats.scp ark,scp,t:$feats_dir/norm_feats.ark,$feats_dir/norm_feats.scp  # Standardize features
+steps/splice_feats_mod.sh --nj $nj --cmd $cmd $feats_dir $feats_log/splice_logs $feats_dir/mfcc_data    # Splice features
 
 
 ### Generate VAD Labels
 mkdir -p $ctmpath
 echo " >>>> GENERATING VAD LABELS <<<< "
-python $py_scripts_dir/generate_vad_labels.py $feats_dir/spliced_feats.scp $model_file $writeVAD_file
+python $py_scripts_dir/generate_vad_labels.py $feats_dir/spliced_feats.scp $model_file $writeVAD_file $round_flag
 
 cat $movListPath | sort | rev | cut -f2 -d\. | cut -f1 -d\/ | rev  > $movie_list
 
-python $py_scripts_dir/combine_movie_seg_labels.py $movie_list $writeVAD_file $ctmpath $labelpath $med_filt
+python $py_scripts_dir/combine_movie_seg_labels.py $movie_list $writeVAD_file $ctmpath $labelpath $med_filt $round_flag

@@ -3,8 +3,8 @@ import os
 ##
 ## PATH-RELATED PARAMETERS
 ##
-LOG_DIR = os.path.join('/enter/complete/path/to/dir/in/which/to/create/logs/dir', 'logs')
-DATA_PATH = '/enter/complete/path/to/folder/containing/train/val/test/directories' 
+LOG_DIR = os.path.join('/enter/complete/path/to/dir/in/which/to/create/logs/dir', 'logs')   # Directory in which to write log files and save model file
+DATA_PATH = '/enter/complete/path/to/folder/containing/train/val/test/directories'          # Directory where downloaded and unzipped tfrecord features are saved (Must contain sub-directories train, test and val
 DATA_PATH_SP_TRAIN = os.path.join(DATA_PATH, 'train/speech')    
 DATA_PATH_NS_TRAIN = os.path.join(DATA_PATH, 'train/non-speech')
 DATA_PATH_SP_VAL = os.path.join(DATA_PATH, 'val/speech')

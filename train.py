@@ -1,4 +1,31 @@
 ''' Training script for speech activity detection in movies
+
+Train a Speech Activity Detection (SAD) model from audio in movies.
+64 dimensional log-mel filterbank features extracted using Kaldi 
+with default parameters are used as input.
+
+Before running training script, edit the following variables in script 
+SAD_parameters.py to reflect corresponding complete paths:
+LOG_DIR and DATA_PATH. Also, training parameters can be modified if 
+required.
+Training can then be performed by running this script as:
+"python train.py"
+
+Important Functions/Classes:
+    get_session        - Start a tensorflow session.
+                         Uses GPU if "CUDA_VISIBLE_DEVICES" is set to
+                         a device ID other than "" on line 20.
+    define_keras_model - define a Convolutional Neural Network model 
+                        in keras using CNN and FC blocks defined in 
+                        ConvMPBlock() and FullyConnectedLayer()
+    Logger             - Class defined to implement model performance
+                         logging, saving model file and stopping training
+    train_model        - Train model with training parameters set in
+                         SAD_parameters.py. Early stopping criterion
+                         is used and defined in Logger class
+    test_model         - Test keras model after training has ended
+                         on external test set.
+
 '''
 
 import os

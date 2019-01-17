@@ -9,8 +9,7 @@ In order to train an SAD model from scratch using this data, the following steps
 3. In the file SAD_parameters.py, edit DATA_PATH to reflect complete path to where the data is stored, and LOG_DIR to reflect directory in which to save logs and model file.
 4. Additionally, training parameters can be modified.
 
-To train a model, execute the train.py script \
-**python train.py**
+To train a model, execute the training script by running : **python train.py**
 
 # Inference 
 Since we use log-mel filterbank features extracted using Kaldi, a Kaldi installation is necessary to run the SAD inference script. Kaldi can be installed by following the instructions [here](https://github.com/kaldi-asr/kaldi). 
@@ -21,7 +20,7 @@ SAD can be performed on any media file compatible with ffmpeg (recommended types
 
 
 
-Usage: bash perform_SAD.sh [-h] [-w y/n] [-f y/n] [-j num_jobs] movie_paths.txt (out_dir)\
+Usage: **bash perform_SAD.sh [-h] [-w y/n] [-f y/n] [-j num_jobs] movie_paths.txt (out_dir)**\
 e.g.: bash perform_SAD.sh -w y -f y -nj 8 demo.txt DEMO\
 where:\
 -h                  : Show help \

@@ -14,12 +14,13 @@ To train a model, execute the train.py script \
 
 # Inference 
 Since we use log-mel filterbank features extracted using Kaldi, a Kaldi installation is necessary to run the SAD inference script. Kaldi can be installed by following the instructions [here](https://github.com/kaldi-asr/kaldi). 
-Once Kaldi is installed, make sure to edit the KALDI_ROOT variable in the 'path.sh' file to reflect the complete path to the installation directory. 
+Once Kaldi is installed, make sure to edit the **KALDI_ROOT** variable in the 'path.sh' file to reflect the complete path to the installation directory. 
+
+
 SAD can be performed on any media file compatible with ffmpeg (recommended types .mp4/.mkv/.wav) by executing the script 'perform_SAD.sh'.
 
 
 
-Perform speech activity detection from audio\
 Usage: bash perform_SAD.sh [-h] [-w y/n] [-f y/n] [-j num_jobs] movie_paths.txt (out_dir)\
 e.g.: bash perform_SAD.sh -w y -f y -nj 8 demo.txt DEMO\
 where:\

@@ -2,7 +2,7 @@
 Speech Activity Detection (SAD) in movie audio. 
 
 # Training
-The details of the Subtitle-Aligned Movie (SAM) Corpus are provided in the [wiki](https://github.com/usc-sail/mica-vad-experiments/wiki)
+The details of the Subtitle-Aligned Movie (SAM) Corpus are provided in the [wiki](https://github.com/usc-sail/mica-vad-experiments/wiki). 
 In order to train an SAD model from scratch using this data, the following steps have to be performed after cloning the directory:
 1. Download the features from [here](https://bit.ly/2QTAw5H).
 2. Extract the features : **tar -xvzf movie_features.tar.gz /path/to/download/**
@@ -29,4 +29,4 @@ where:\
 -f                  : Store feature files after processing (default: n)\
 -j                  : Number of parallel jobs to run (default: 16)\
 movie_paths.txt     : Text file consisting of complete paths to media files (eg, .mp4/.mkv) on each line \
-out_dir             : Directory in which to store all output files (default: "\$PWD"/SAD_out_dir)\
+out_dir             : Directory in which to store all output files (default: SAD_out_dir)\

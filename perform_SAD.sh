@@ -91,7 +91,7 @@ if [ $num_movies -lt $nj ]; then
     nj=$num_movies
 fi
 
-proj_dir=$PWD
+proj_dir=$(dirname "$0")
 sad_model=$proj_dir/models/cnn_td.h5
 wav_dir=$expt_dir/wavs
 feats_dir=$expt_dir/features

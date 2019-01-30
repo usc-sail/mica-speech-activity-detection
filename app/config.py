@@ -8,6 +8,6 @@ SECRET_KEY='dev'
 MAIL_RECIPIENTS=['rajathebbar@gmail.com']
 MAIL_SUBJECT='ITU_speaking_time_numbers'
 SCRIPT_DIR='..'
-OUT_DIR='app/temp'
+OUT_DIR='app/out_dir'
 UPLOAD_FOLDER='app/data'
 REDIS_URL='redis://localhost:6379'

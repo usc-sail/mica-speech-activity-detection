@@ -1,0 +1,18 @@
+ <!doctype html>
+ <title>Upload new file</title>
+ <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}   
+ <h1>Upload new file</h1>
+ </body>
+ <form method=post enctype=multipart/form-data>
+ <input type=file name=file>
+ <input type=submit value=Upload>
+ </form> 

@@ -28,4 +28,4 @@ where:\
 -f                  : Store feature files after processing (default: n)\
 -j                  : Number of parallel jobs to run (default: 16)\
 movie_paths.txt     : Text file consisting of complete paths to media files (eg, .mp4/.mkv) on each line \
-out_dir             : Directory in which to store all output files (default: SAD_out_dir)\
+out_dir             : Directory in which to store all output files (default: SAD_out_dir)

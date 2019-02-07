@@ -21,7 +21,8 @@
 ##      nj            : number of jobs to be run in parallel 
 ##      feats_flag    : 'y' if you want to retain feature files after execution
 ##      wavs_flag     : 'y' if you want to retain '.wav' audio files after execution
-##  
+##      overlap       : % overlap of segments during inference (0-1, i.e, 0 for no overlap, 
+##                      1 for complete overlap)
 ##  Packages/libraries required :
 ##     kaldi          : ensure that all kaldi binaries are added to system path. If not,
 ##                      either add them to system path, or modify KALDI_ROOT in 1st line of
@@ -39,7 +40,8 @@ where:
 -h                  : Show help 
 -w                  : Store wav files after processing (default: n)
 -f                  : Store feature files after processing (default: n)
--j                 : Number of parallel jobs to run (default: 16)
+-j                  : Number of parallel jobs to run (default: 16)
+-o                  : Percentage overlap of segments during inference, ranging from 0 to 1 (default:0)
 movie_paths.txt     : Text file consisting of complete paths to media files (eg, .mp4/.mkv) on each line 
 out_dir             : Directory in which to store all output files (default: "\$PWD"/SAD_out_dir)
 "
@@ -53,7 +55,7 @@ if [ -f path.sh ]; then . ./path.sh; fi
 feats_flag="n"
 wavs_flag="n"
 nj=16
-
+overlap=0
 ## Input Options
 if [ $# -eq 0 ];
 then
@@ -61,7 +63,7 @@ then
     exit
 fi
 
-while getopts ":hw:f:j:" option
+while getopts ":hw:f:j:o:" option
 do
     case "${option}"
     in
@@ -70,6 +72,7 @@ do
         f) feats_flag="${OPTARG}";;
         w) wavs_flag="${OPTARG}";;
         j) nj=${OPTARG};;
+        o) overlap=${OPTARG};;
         \?) echo "Invalid option: -$OPTARG" >&2 
         printf "See below for usage\n\n"
         echo "$usage"
@@ -127,7 +130,7 @@ for movie_path in `cat $movie_list`
 do
     movieName=`basename $movie_path | awk -F '.' '{print $1}'`
     cat $feats_dir/feats.scp | grep -- "${movieName}" > $lists_dir/${movieName}_feats.scp
-    python $proj_dir/inference_scripts/model_predict.py $expt_dir $lists_dir/${movieName}_feats.scp $sad_model $nj & 
+    python $proj_dir/inference_scripts/model_predict.py $expt_dir $lists_dir/${movieName}_feats.scp $sad_model $overlap & 
     if [ $(($movie_count % $nj)) -eq 0 ];then
         wait
     fi

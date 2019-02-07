@@ -48,7 +48,10 @@ def normalize(data):
     return np.divide(np.subtract(data, np.mean(data)), np.std(data))
 
 def main():
-    write_dir, scp_file, model_file, nj = sys.argv[1:]
+    write_dir, scp_file, model_file = sys.argv[1:-1]
+    overlap = float(sys.argv[-1])
+    assert overlap >= 0 and overlap < 1, "Invalid choice of overlap must range between 0 and 1"
+    num_frames, num_freq = (64, 64)
     K.set_session(K.tf.Session(config=K.tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)))
     frame_len = 0.01
     write_post = os.path.join(write_dir, 'SAD/posteriors/')
@@ -59,16 +62,20 @@ def main():
 
     # Generate SAD posteriors using pre-trained SAD model
     for movie, fts in gen:
-        predictions = []
-        num_seg = int(len(fts)//64)
+        shift = num_frames - int(overlap*num_frames)
+        num_seg = int((len(fts)-num_frames)//shift)
+        pred = [[] for i in range(fts.shape[0])]
+
         for i in range(num_seg):
-            feats_seg = normalize(fts[i*64:(i+1)*64])
-            pred = model.predict(feats_seg.reshape((1, 64, 64, 1)), verbose=0)
-            predictions.append(pred[0][1])
+            feats_seg = normalize(fts[i*shift:i*shift+num_frames])
+            p = model.predict(feats_seg.reshape((1, num_frames, num_freq, 1)), verbose=0)
+            for j in range(i*shift, i*shift+64):
+                pred[j].extend([p[0][1]])
+        predictions = np.array([np.median(pred[i]) if pred[i]!=[] else 0 for i in range(fts.shape[0])])
 
         # Post-processing of posteriors
-        labels = np.array([np.repeat(x, 64) for x in predictions]).flatten()
-        seg_times = frame2seg(np.round(labels))
+        labels = np.round(predictions)
+        seg_times = frame2seg(labels)
         # Write start and end SAD timestamps 
         fw = open(os.path.join(write_ts, movie + '.ts'),'w')
 

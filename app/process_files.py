@@ -6,7 +6,9 @@ from app.email import send_email
 
 OUT_DIR='/Users/rabbeh/Projects/ITU/flask_proj/mod_proj/app/out_dir'
 SCRIPT_DIR='/Users/rabbeh/Projects/VAD/mica-speech-activity-detection'
-def run_SAD(data_filepath):
+def run_SAD(data_filepath, emailID, mod_start, mod_end):
+    if emailID != "":
+        MAIL_RECIPIENTS=[emailID]
     if not os.path.exists(OUT_DIR):
         os.mkdir(OUT_DIR)
     

@@ -7,7 +7,7 @@ from app import app
 manager = Manager(app)
 manager.add_command(
     'runserver',
-    Server(port=5000, use_debugger=True, use_reloader=True))
+    Server(port=5001, use_debugger=True, use_reloader=True))
 
 
 @manager.command

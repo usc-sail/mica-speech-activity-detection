@@ -1,6 +1,6 @@
 # make sure the kaldi binary files are indicated in this path file
 # set this manually
-export KALDI_ROOT=/proj/tools/kaldi
+export KALDI_ROOT=/Users/rabbeh/Software/kaldi
 
 export PATH=$PWD/utils/:$KALDI_ROOT/src/diarbin/:$KALDI_ROOT/src/featbin/:$PATH
 

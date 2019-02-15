@@ -6,7 +6,7 @@ from flask import request, redirect, render_template, flash, Blueprint, g
 from werkzeug.utils import secure_filename
 from app.main import bp
 from rq import Queue, push_connection, pop_connection
-
+from wtforms import Form, validators, TextField, FloatField, FileField
 ALLOWED_EXTENSIONS = set(['mp4', 'mkv'])
 
 
@@ -32,26 +32,43 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+class ReusableForm(Form):
+    emailID = TextField('Email Address', validators=[validators.required()])
+    mod_start = FloatField('Moderator Start Time (s)', validators=[validators.required()])
+    mod_end = FloatField('Moderator Start Time (s)', validators=[validators.required()])
+    ipfile = FileField('File', validators=[validators.required()])
+    
 @bp.route('/', methods=['GET', 'POST'])
 def index():
+    form = ReusableForm(request.form)
+
     if request.method == 'POST':
-        if 'file' not in request.files:
-            print('exception 1')
+        email = request.form['email']
+        mod_start = request.form['start']
+        mod_end = request.form['end']
+        
+        if "inputfile" not in request.files:
             flash('Please select a file')
-            return redirect(request.url)
-        file = request.files['file']
-        if not allowed_file(file.filename):
-            print('exception 2')
-            flash('Only .mp4/.mkv files allowed, please try again.')
-            return redirect(request.url)
-        if file:
-            filename = secure_filename(file.filename)
+            return render_template("upload.html", form=form)
+        
+        if mod_start >= mod_end:
+            flash('Please enter valid times')
+            return render_template("upload.html", form=form)
+
+        if email=="":
+            flash('Please enter an email address') 
+            return render_template("upload.html", form=form)
+        
+
+        ipfile = request.files['inputfile']
+        if ipfile:
+            filename = secure_filename(ipfile.filename)
             filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+            ipfile.save(filepath)
             flash("File {} has been uploaded successfully, please wait for email with inference details".format(filename))
             job_queue = Queue()
-            job = job_queue.enqueue('app.process_files.run_SAD', args=(filepath,), timeout=current_app.config['JOB_TIMEOUT'] )
+            job = job_queue.enqueue('app.process_files.run_SAD', args=(filepath, email, mod_start, mod_end), timeout=current_app.config['JOB_TIMEOUT'] )
             return redirect(request.url)
-    return render_template("upload.html") 
+    return render_template("upload.html", form=form) 
 
 

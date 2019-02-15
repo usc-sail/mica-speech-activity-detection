@@ -1,18 +1,49 @@
- <!doctype html>
- <title>Upload new file</title>
- <body>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }} </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}   
- <h1>Upload new file</h1>
- </body>
- <form method=post enctype=multipart/form-data>
- <input type=file name=file>
- <input type=submit value=Upload>
- </form> 
+ {%- extends "base.html" %}
+ {% import "bootstrap/wtf.html" as wtf %}
+ 
+ {% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<ul>
+			{% for message in messages %}
+			<li>{{ message }} </li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+ {% endwith %} 
+
+ {% block main %}
+    <div class="panel panel-default">
+        <div class="panel-heading"> Select file to process </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+			<form method=post enctype=multipart/form-data>
+                 {{ form.csrf }}
+                 <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+                </div>
+
+				<div class="row">
+					<div class="col-md-6">
+				      <label for="start">Moderator Start Time (s)</label>
+					  <input type="number" step="any" class="form-control" id="start" name="start" placeholder="0.0">
+					</div>
+					<div class="col-md-6">
+				      <label for="end">Moderator End Time (s)</label>
+					  <input type="number" step="any" class="form-control" id="end" name="end" placeholder="3.5">
+					</div>
+				  </div>
+				<div class="custom-file">
+					<input type="file" accept=".mp4,.mkv" class="custom-file-input" id="inputfile" name="inputfile">
+					<label class="custom-file-label" for="inputfile"></label>
+				  </div>
+				<input class="btn btn-primary" type="submit" value="Submit">
+		   </form>
+
+
+           </div>
+       </div>
+       </div>
+   </div>    
+
+ {% endblock %}

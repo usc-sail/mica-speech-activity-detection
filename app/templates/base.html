@@ -1,0 +1,40 @@
+{%- extends "bootstrap/base.html" %}
+{% import "bootstrap/utils.html" as utils %}
+
+{% block head %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {{super()}}
+{% endblock %}
+
+{% block styles %}
+  {{super()}}
+  <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}My App{% endblock %}
+
+{% block navbar %}
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <!--img class="navbar-brand" src="../../static/logo.png"-->
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">My App</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="container" id="mainContent">
+    {{utils.flashed_messages(container=False, dismissible=True)}}
+    {% block main %}{% endblock %}
+  </div>
+{% endblock %}

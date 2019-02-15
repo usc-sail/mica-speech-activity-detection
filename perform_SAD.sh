@@ -45,8 +45,8 @@ out_dir             : Directory in which to store all output files (default: "\$
 "
 
 ## Kill all background processes if file exits due to error
-trap "exit" INT TERM
-trap "kill 0" EXIT
+#trap "exit" INT TERM
+#trap "kill 0" EXIT
 ## Add kaldi binaries to path if path.sh file exists
 if [ -f path.sh ]; then . ./path.sh; fi
 ## Default Options

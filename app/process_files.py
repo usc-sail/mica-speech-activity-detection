@@ -1,10 +1,12 @@
 import sys, os
 from flask import Flask
-from config import *
-from send_email import send_email
-#from new_app.config import *
+from flask import current_app
+from app.config import *
+from app.email import send_email
 
-def run_VAD(data_filepath):
+OUT_DIR='/Users/rabbeh/Projects/ITU/flask_proj/mod_proj/app/out_dir'
+SCRIPT_DIR='/Users/rabbeh/Projects/VAD/mica-speech-activity-detection'
+def run_SAD(data_filepath):
     if not os.path.exists(OUT_DIR):
         os.mkdir(OUT_DIR)
     
@@ -18,12 +20,12 @@ def run_VAD(data_filepath):
     fw.write('{}\n'.format(data_filepath))
     fw.close()
 
-#    os.system('bash {}/perform_SAD.sh {} {}'.format(SCRIPT_DIR, paths_file, out_dir))
-    msg = 'File {} has been processed'
+    os.system('bash {}/perform_SAD.sh {} {}'.format(SCRIPT_DIR, paths_file, out_dir))
+    msg = f'File {filename} has been processed'
     #msg = Message('File {} has been processed'.format(filename), sender=MAIL_USERNAME, recipients = MAIL_RECIPIENTS)
     #mail.send(msg)   
-    send_email(subject = MAIL_SUBJECT, sender = MAIL_USERNAME, recipients = MAIL_RECIPIENTS, text_body=msg, html_body='')#, sync=True)
+    send_email(subject = MAIL_SUBJECT, sender = MAIL_USERNAME, recipients = MAIL_RECIPIENTS, text_body=msg, html_body='', sync=True)
 
 if __name__=='__main__':
     data_path = sys.argv[1]
-    run_VAD(data_path)
+    run_SAD(data_path)

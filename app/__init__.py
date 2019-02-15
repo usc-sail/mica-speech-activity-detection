@@ -1,13 +1,17 @@
 from flask import Flask
 from flask_mail import Mail
-from redis import Redis
-import rq
+from flask_bootstrap import Bootstrap 
+from app.main import bp as main
 
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-mail = Mail(app)
-mail.init_app(app)
-app.redis = Redis.from_url(app.config['REDIS_URL'])
-app.task_queue = rq.Queue('default', connection=app.redis)
+bootstrap = Bootstrap()
+mail = Mail()
 
-from app import routes
+def create_app():
+    app = Flask(__name__)
+    app.config.from_pyfile('config.py')
+    mail.init_app(app)
+    bootstrap.init_app(app)
+    app.register_blueprint(main)
+    return app
+
+app = create_app()
